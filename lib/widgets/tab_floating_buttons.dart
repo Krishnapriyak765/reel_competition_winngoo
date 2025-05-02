@@ -139,7 +139,7 @@ class TabFloatingButtons extends StatelessWidget {
           const SizedBox(width: 12),
           ElevatedButton(
             onPressed: () {
-              context.pushNamed('login');
+              context.pushNamed('register');
             },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(160, 50),

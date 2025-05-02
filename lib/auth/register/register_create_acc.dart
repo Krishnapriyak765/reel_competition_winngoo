@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reels_application/auth/register/register_personal_info.dart';
 import 'package:reels_application/core/services/privacy_policy.dart';
-import 'package:reels_application/presentation/onboarding/onboarding_page2.dart';
 
 class CreateAccountPage extends StatefulWidget {
   @override
@@ -43,6 +42,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       signupData['pass'] = passwordController.text.trim();
       signupData['referral_code'] = referralController.text.trim();
       print(signupData);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PersonalInfoForm(signupData: signupData),
+        ),
+      );
       // Navigator.push(
       //   context,
       // MaterialPageRoute(

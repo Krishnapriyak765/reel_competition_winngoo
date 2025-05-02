@@ -1,10 +1,19 @@
 import 'dart:async';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:reels_application/config/routes/app_routes.dart';
+import 'package:reels_application/core/constants/constants.dart';
+import 'package:reels_application/core/services/dio_base_service.dart';
 
+var screenwidth;
+var screenHeight;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // await dotenv.load(fileName: Constants.envPath); //load .env file
+  // HttpOverrides.global = MyHttpOverrides();
+  // // ... make network requests using Dio
+  // await DioBaseService.init(); //initialize Dio service
 
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
@@ -14,12 +23,6 @@ void main() async {
   runZonedGuarded(
     () async {
       try {
-        // Initialize Stripe
-        // Stripe.publishableKey =
-        //     "your_publishable_key"; // Replace with actual key
-        // await Stripe.instance.applySettings();
-
-        // Run the app
         runApp(const MyApp());
       } catch (e, stackTrace) {
         debugPrint("Error during main(): $e");
@@ -38,6 +41,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    screenwidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
     return
     // MaterialApp(home: Scaffold(body: Center(child: Text("It works!"))));
     MaterialApp.router(
@@ -50,5 +55,14 @@ class MyApp extends StatelessWidget {
             );
       },
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

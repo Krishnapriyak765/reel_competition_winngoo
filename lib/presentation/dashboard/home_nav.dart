@@ -69,7 +69,7 @@ class _HomeScreenWithNavState extends State<HomeScreenWithNav> {
           Image.asset(
             assetPath,
             height: 28,
-            color: isSelected ? Appcolors.white : Colors.white.withOpacity(0.5),
+            color: isSelected ? Appcolors.secondaryYellow : Appcolors.white,
           ),
           if (isSelected)
             Container(

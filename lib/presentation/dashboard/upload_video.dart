@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:reels_application/core/constants/app_colors.dart';
+import 'package:reels_application/main.dart';
 import 'package:reels_application/widgets/logout_dialog.dart';
 import 'package:reels_application/widgets/review_dialog.dart';
 import 'package:reels_application/widgets/upload_sucessMessage.dart';
@@ -36,9 +38,8 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // var screenWidth = MediaQuery.of(context).size.width;
-    // var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Appcolors.white,
       appBar: AppBar(
         title: Text(
           "Upload Video",
@@ -63,9 +64,11 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
                       onTap: () {
                         context.pushNamed('competionRule');
                       },
-                      child: Text(
-                        "Competition Rules",
-                        style: GoogleFonts.inter(color: Appcolors.white),
+                      child: Container(
+                        child: Text(
+                          "Competition Rules",
+                          style: GoogleFonts.inter(color: Appcolors.white),
+                        ),
                       ),
                     ),
                   ),
@@ -77,14 +80,14 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
                           builder:
                               (context) => ReviewDialog(
                                 onClose: () => Navigator.pop(context),
-                                token:
-                                    "4|CAQ9z1WD9vyFSp1Nt9VeN3FfQIoIRODAWz3InEUO178ecac2",
                               ),
                         );
                       },
-                      child: Text(
-                        "Review",
-                        style: GoogleFonts.inter(color: Appcolors.white),
+                      child: Container(
+                        child: Text(
+                          "Review",
+                          style: GoogleFonts.inter(color: Appcolors.white),
+                        ),
                       ),
                     ),
                   ),
@@ -105,195 +108,300 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
           ),
         ],
       ),
-      body: _isUploaded ? _buildUploadedUI() : _buildVideoUploadUI(),
+      body: _isUploaded == true ? _buildUploadedUI() : _buildVideoUploadUI(),
     );
   }
 
   Widget _buildVideoUploadUI() {
-    var screenHeight = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 16),
-          // Tap to pick video
-          GestureDetector(
-            onTap: pickVideo,
-            child: Container(
-              height: screenHeight * 0.27,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child:
-                  _selectedVideo != null && _videoPlayerController != null
-                      ? ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: AspectRatio(
-                          aspectRatio:
-                              _videoPlayerController!.value.aspectRatio,
-                          child: VideoPlayer(_videoPlayerController!),
-                        ),
-                      )
-                      : Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            // Tap to pick video
+            GestureDetector(
+              onTap: pickVideo,
+              child: Container(
+                height: screenHeight * 0.3,
+                decoration: BoxDecoration(
+                  color: Appcolors.background,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child:
+                    _selectedVideo != null && _videoPlayerController != null
+                        ? ClipRRect(
                           borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              "Upload Video",
-                              textAlign: TextAlign.start,
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Container(
-                              height: 150,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Appcolors.primaryColor,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      "assets/images/upload_placeholder.png",
-                                      height: 60,
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      "Drop your video here",
-                                      style: GoogleFonts.inter(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Supported: .MP4, .MOV",
-                                      style: GoogleFonts.inter(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
+                          child: AspectRatio(
+                            aspectRatio:
+                                _videoPlayerController!.value.aspectRatio,
+                            child: VideoPlayer(_videoPlayerController!),
+                          ),
+                        )
+                        : Container(
+                          height: screenHeight * 0.3,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                "Upload Video",
+                                textAlign: TextAlign.start,
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
                                 ),
                               ),
-                            ),
-                          ],
+                              SizedBox(height: screenHeight * 0.02),
+                              DottedBorder(
+                                color: Appcolors.primaryColor,
+                                strokeWidth: 1,
+                                dashPattern: [5, 3],
+                                child: Container(
+                                  height: screenHeight * 0.2,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Appcolors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          "assets/images/upload_placeholder.png",
+                                          height: screenHeight * 0.1,
+                                        ),
+                                        SizedBox(height: screenHeight * 0.02),
+                                        Text(
+                                          "Click here to submit your video",
+                                          style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Supports: 3GP, WEBM, MP4 or MOV",
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text('Type', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 16),
-          // Type Field
-          TextField(
-            controller: _typeController,
-            decoration: InputDecoration(
-              hintText: "Type here",
-              hintStyle: GoogleFonts.inter(),
-              filled: true,
-              fillColor: Colors.grey.shade100,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Appcolors.black, width: 2),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Description',
-            style: GoogleFonts.inter(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          // Description Field
-          TextField(
-            controller: _descriptionController,
-            maxLines: 3,
-            decoration: InputDecoration(
-              hintText: "Description",
-              hintStyle: GoogleFonts.inter(),
-              filled: true,
-              fillColor: Colors.grey.shade100,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Appcolors.black, width: 2),
+            const SizedBox(height: 16),
+            Text('Type', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            // Type Field
+            TextField(
+              controller: _typeController,
+              decoration: InputDecoration(
+                hintText: "Enter Type ",
+                hintStyle: GoogleFonts.inter(),
+                filled: true,
+                fillColor: Appcolors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Appcolors.black, width: 2),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
+            const SizedBox(height: 12),
+            Text(
+              'Description',
+              style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            // Description Field
+            TextField(
+              controller: _descriptionController,
 
-          // Upload Button
-          ElevatedButton(
-            onPressed: _canUpload() ? _uploadVideo : null,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Appcolors.primaryColor,
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: "Type here....",
+                hintStyle: GoogleFonts.inter(),
+                filled: true,
+                fillColor: Appcolors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Appcolors.black, width: 2),
+                ),
               ),
             ),
+            const SizedBox(height: 20),
 
-            child:
-                _isUploading
-                    ? CircularProgressIndicator(color: Colors.white)
-                    : Text(
-                      "Upload",
-                      style: GoogleFonts.inter(
-                        color: Appcolors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+            // Upload Button
+            Center(
+              child: Container(
+                width: screenwidth * 0.5,
+                child: ElevatedButton(
+                  onPressed:
+                      _selectedVideo != null &&
+                              _typeController.text.trim().isNotEmpty &&
+                              _descriptionController.text.trim().isNotEmpty
+                          ? _uploadVideo
+                          : _enterFieldError,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Appcolors.primaryColor,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 25,
+                      vertical: 12,
                     ),
-          ),
-        ],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+
+                  child:
+                      _isUploading == true
+                          ? CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                            "Upload",
+                            style: GoogleFonts.inter(
+                              color: Appcolors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  bool _canUpload() {
-    return _selectedVideo != null &&
-        _typeController.text.trim().isNotEmpty &&
-        _descriptionController.text.trim().isNotEmpty;
-  }
-
-  Widget _buildUploadedUI() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (_showSuccessMessage)
-          UploadSuccessMessage(
-            onDismiss:
-                _dismissSuccessMessage, // Dismiss success message on button press
-          ),
-        if (_videoPlayerController != null &&
-            _videoPlayerController!.value.isInitialized)
-          AspectRatio(
-            aspectRatio: _videoPlayerController!.value.aspectRatio,
-            child: VideoPlayer(_videoPlayerController!),
-          )
-        else
-          const SizedBox.shrink(),
-        const SizedBox(height: 20),
-        // Add more post-upload info if needed
+  void _enterFieldError() {
+    AlertDialog(
+      title: const Text('Please Check'),
+      content: const Text('Please check all the fields are filled to proceed.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('OK'),
+        ),
       ],
     );
   }
 
+  Widget _buildUploadedUI() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: screenHeight * 0.02),
+          // Uploaded video box
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Appcolors.background,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Upload Video",
+                  textAlign: TextAlign.start,
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  width: screenwidth * 0.8,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child:
+                        _isUploaded != null &&
+                                _videoPlayerController != null &&
+                                _videoPlayerController!.value.isInitialized
+                            ? AspectRatio(
+                              aspectRatio:
+                                  _videoPlayerController!.value.aspectRatio,
+                              child: VideoPlayer(_videoPlayerController!),
+                            )
+                            : Container(
+                              height: screenHeight * 0.2,
+                              width: screenwidth * 0.7,
+                              color: Colors.black12,
+                              child: Center(
+                                child: Text("Video preview not available"),
+                              ),
+                            ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "Already you sent reels video",
+                  style: GoogleFonts.inter(fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: screenHeight * 0.47,
+            width: double.infinity,
+            child: ReviewDialog(
+              onClose: () => context.pushNamed('homewithnav'),
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.03),
+        ],
+      ),
+    );
+  }
+  // bool _canUpload() {
+  //   print(
+  //     _selectedVideo != null &&
+  //         _typeController.text.trim().isNotEmpty &&
+  //         _descriptionController.text.trim().isNotEmpty,
+  //   );
+  //   return _selectedVideo != null &&
+  //       _typeController.text.trim().isNotEmpty &&
+  //       _descriptionController.text.trim().isNotEmpty;
+  // }
+
+  // Widget _buildUploadedUI() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       if (_showSuccessMessage)
+  //         UploadSuccessMessage(
+  //           onDismiss:
+  //               _dismissSuccessMessage, // Dismiss success message on button press
+  //         ),
+  //       if (_videoPlayerController != null &&
+  //           _videoPlayerController!.value.isInitialized)
+  //         AspectRatio(
+  //           aspectRatio: _videoPlayerController!.value.aspectRatio,
+  //           child: VideoPlayer(_videoPlayerController!),
+  //         )
+  //       else
+  //         const SizedBox.shrink(),
+  //       const SizedBox(height: 20),
+  //       // Add more post-upload info if needed
+  //     ],
+  //   );
+  // }
+
   Future<void> _uploadVideo() async {
-    if (!_canUpload()) return;
+    // if (!_canUpload()) return;
 
     setState(() => _isUploading = true);
 
@@ -314,12 +422,12 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
 
       if (response.statusCode == 200) {
         setState(() {
-          _isUploading = false;
+          // _isUploading = false;
           _isUploaded = true;
         });
         print("✅ Upload successful");
       } else {
-        print("❌ Upload failed: ${response.statusCode}");
+        print("❌Upload failed: ${response.statusCode}");
         setState(() => _isUploading = false);
       }
     } catch (e) {
@@ -346,33 +454,11 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
       }
 
       setState(() {
+        print(_selectedVideo);
+        print('_selectedVideo SUCESSFULLY');
         _selectedVideo = file;
         _videoPlayerController = controller;
       });
-    }
-  }
-
-  Future<bool> logoutUser(String token) async {
-    final url = Uri.parse("https://winngooreels.wimbgo.com/api/user/logout");
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {
-          "Authorization": "Bearer $token",
-          "Content-Type": "application/json",
-        },
-      );
-
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        print('Logout failed: ${response.statusCode} - ${response.body}');
-        return false;
-      }
-    } catch (e) {
-      print('Error during logout: $e');
-      return false;
     }
   }
 }

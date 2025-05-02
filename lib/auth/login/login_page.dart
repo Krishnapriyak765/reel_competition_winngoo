@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:reels_application/auth/password/forgot_password.dart';
 import 'package:reels_application/presentation/dashboard/home_nav.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final GetStorage storage = GetStorage();
+  // final GetStorage storage = GetStorage();
 
   bool _obscurePassword = true;
   bool rememberMe = false;
@@ -62,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
     final url = "https://winngooreels.wimbgo.com/api/login";
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
       final response = await http.post(
@@ -81,7 +83,8 @@ class _LoginPageState extends State<LoginPage> {
         final token = resBody['token'];
 
         if (rememberMe && token != null) {
-          await storage.write('token', token);
+          // await storage.write('token', token);
+          prefs..setString('token', token);
         }
         Navigator.push(
           context,

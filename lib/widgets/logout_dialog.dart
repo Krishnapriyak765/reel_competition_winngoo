@@ -42,24 +42,27 @@ void showLogoutDialog(BuildContext context) {
                   ElevatedButton(
                     onPressed: () async {
                       final prefs = await SharedPreferences.getInstance();
-                      final token = prefs.getString('auth_token');
-
+                      final token = prefs.getString('token');
+                      print('NOT EVEN ENTER TO FUNCTION');
                       if (token != null) {
-                        final success = await logoutUser(token);
-                        if (success) {
-                          await prefs.remove('auth_token');
-                          // ✅ Navigate to login
-                          if (context.mounted) {
-                            Navigator.of(context).pop(); // Close dialog
-                            context.goNamed(
-                              'login',
-                            ); // Replace with your login route name
-                          }
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Logout failed')),
-                          );
+                        print('token not null');
+                        // final success = await logoutUser(token);
+                        // if (success) {
+                        await prefs.remove('token');
+                        // ✅ Navigate to login
+                        if (context.mounted) {
+                          print('login navigate');
+                          Navigator.of(context).pop(); // Close dialog
+                          context.goNamed(
+                            'login',
+                          ); // Replace with your login route name
                         }
+                        // }
+                        // else {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     SnackBar(content: Text('Logout failed')),
+                        //   );
+                        // }
                       }
                     },
                     style: ElevatedButton.styleFrom(

@@ -122,6 +122,7 @@ class _CompetitionPageState extends State<CompetitionPage> {
                   color: Appcolors.primaryColor,
                   borderRadius: BorderRadius.circular(34),
                 ),
+                dividerHeight: 0,
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.grey,
                 labelStyle: TextStyle(
