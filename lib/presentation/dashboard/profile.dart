@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:reels_application/core/constants/app_colors.dart';
 import 'package:reels_application/data/models/profile_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MembershipInfoPage extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class MembershipInfoPage extends StatefulWidget {
 
 class _MembershipInfoPageState extends State<MembershipInfoPage> {
   final GetStorage storage = GetStorage();
+
   User? user;
   bool isLoading = true;
 
@@ -22,7 +24,10 @@ class _MembershipInfoPageState extends State<MembershipInfoPage> {
   }
 
   Future<void> fetchUserProfile() async {
-    final token = storage.read('token');
+    // final token = storage.read('token');
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
     final url = Uri.parse("https://winngooreels.wimbgo.com/api/user/dashboard");
 
     try {
@@ -31,6 +36,7 @@ class _MembershipInfoPageState extends State<MembershipInfoPage> {
         headers: {
           "Authorization": "Bearer $token",
           "Accept": "application/json",
+          'Content-Type': 'application/json',
         },
       );
 
