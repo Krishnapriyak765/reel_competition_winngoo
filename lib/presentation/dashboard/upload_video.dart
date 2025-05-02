@@ -249,12 +249,14 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
               child: Container(
                 width: screenwidth * 0.5,
                 child: ElevatedButton(
-                  onPressed:
-                      _selectedVideo != null &&
-                              _typeController.text.trim().isNotEmpty &&
-                              _descriptionController.text.trim().isNotEmpty
-                          ? _uploadVideo
-                          : _enterFieldError,
+                  onPressed: () {
+                    _selectedVideo != null &&
+                            _typeController.text.trim().isNotEmpty &&
+                            _descriptionController.text.trim().isNotEmpty
+                        ? _uploadVideo
+                        : _enterFieldError;
+                    print("WORKING ALERT");
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Appcolors.primaryColor,
                     padding: const EdgeInsets.symmetric(
@@ -266,17 +268,14 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
                     ),
                   ),
 
-                  child:
-                      _isUploading == true
-                          ? CircularProgressIndicator(color: Colors.white)
-                          : Text(
-                            "Upload",
-                            style: GoogleFonts.inter(
-                              color: Appcolors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
+                  child: Text(
+                    "Upload",
+                    style: GoogleFonts.inter(
+                      color: Appcolors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
               ),
             ),

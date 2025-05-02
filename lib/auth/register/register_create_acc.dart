@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:reels_application/auth/register/register_personal_info.dart';
+import 'package:reels_application/core/services/policy_pdf_service.dart';
 import 'package:reels_application/core/services/privacy_policy.dart';
 
 class CreateAccountPage extends StatefulWidget {
@@ -49,13 +50,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           builder: (context) => PersonalInfoForm(signupData: signupData),
         ),
       );
-      // Navigator.push(
-      //   context,
-      // MaterialPageRoute(
-      //   builder: (_) (){}
-      //   //  PersonalInfoForm(signupData: signupData),
-      // ),
-      // );
     }
   }
 
@@ -187,8 +181,31 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               style: TextStyle(color: Colors.blue),
                               recognizer:
                                   TapGestureRecognizer()
-                                    ..onTap = () {
-                                      fetchTermsConditions();
+                                    ..onTap = () async {
+                                      final pdfUrls = await fetchPdfUrl(
+                                        "https://winngooreels.wimbgo.com/api/terms-conditions",
+                                      );
+                                      if (pdfUrls != null) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => PDFViewerPage(
+                                                  pdfUrl: pdfUrls,
+                                                ),
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Failed to load PDF URL',
+                                            ),
+                                          ),
+                                        );
+                                      }
                                     },
                             ),
                             TextSpan(text: ' and '),
@@ -197,8 +214,31 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                               style: TextStyle(color: Colors.blue),
                               recognizer:
                                   TapGestureRecognizer()
-                                    ..onTap = () {
-                                      fetchPrivacyPolicy();
+                                    ..onTap = () async {
+                                      final pdfUrls = await fetchPdfUrl(
+                                        "https://winngooreels.wimbgo.com/api/privacy",
+                                      );
+                                      if (pdfUrls != null) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => PDFViewerPage(
+                                                  pdfUrl: pdfUrls,
+                                                ),
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Failed to load PDF URL',
+                                            ),
+                                          ),
+                                        );
+                                      }
                                     },
                             ),
                           ],

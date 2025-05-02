@@ -121,7 +121,10 @@ class TabFloatingButtons extends StatelessWidget {
                   style: _buttonStyle,
                   child: Text(
                     "Contact Details",
-                    style: GoogleFonts.inter(color: Appcolors.primaryColor),
+                    style: GoogleFonts.inter(
+                      color: Appcolors.primaryColor,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -155,7 +158,7 @@ class TabFloatingButtons extends StatelessWidget {
               style: GoogleFonts.inter(color: Appcolors.white),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
         ],
       ),
     );
@@ -163,6 +166,7 @@ class TabFloatingButtons extends StatelessWidget {
 
   final ButtonStyle _buttonStyle = ElevatedButton.styleFrom(
     minimumSize: const Size(double.infinity, 45),
+
     backgroundColor: Appcolors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
