@@ -31,7 +31,6 @@ class AboutTab extends StatelessWidget {
           SizedBox(height: 8),
           ...themes.map((theme) => ThemeListTile(title: theme)).toList(),
           SizedBox(height: 20),
-          TabFloatingButtons(), // ✅ This is where the buttons show
         ],
       ),
     );

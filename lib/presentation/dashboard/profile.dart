@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:reels_application/core/constants/app_colors.dart';
 import 'package:reels_application/data/models/profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,8 +43,17 @@ class _MembershipInfoPageState extends State<MembershipInfoPage> {
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
+        String formatCreatedTime(String createdAt) {
+          DateTime dateTime = DateTime.parse(createdAt);
+          String formattedTime = DateFormat(
+            'hh:mm a',
+          ).format(dateTime); // e.g., 11:14 AM
+          return formattedTime;
+        }
+
         setState(() {
           user = User.fromJson(data['user']);
+
           isLoading = false;
         });
       } else {
@@ -112,13 +122,13 @@ class _MembershipInfoPageState extends State<MembershipInfoPage> {
                         children: [
                           buildTableRow(
                             Icons.badge,
-                            'Userid',
-                            '${user!.userId}',
+                            'Name',
+                            '${user!.firstName} ${user!.lastName}',
                           ),
                           buildTableRow(
                             Icons.credit_card,
-                            'Name',
-                            '${user!.firstName} ${user!.lastName}',
+                            'Member ID',
+                            '${user!.userId}',
                           ),
                           buildTableRow(
                             Icons.email,
@@ -151,15 +161,20 @@ class _MembershipInfoPageState extends State<MembershipInfoPage> {
                             '${user!.residentialCountry}',
                           ),
                           buildTableRow(
-                            Icons.stars,
-                            'Reward Points',
-                            '${user!.rewardPoints}',
+                            Icons.create_new_folder,
+                            'Created at',
+                            '${user!.createdTimeOnly}',
                           ),
                         ],
                       ),
                       const SizedBox(height: 20),
                       Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.only(
+                          left: 7,
+                          top: 10,
+                          right: 8,
+                          bottom: 19,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.red[600],
                           borderRadius: BorderRadius.circular(10),
@@ -169,7 +184,7 @@ class _MembershipInfoPageState extends State<MembershipInfoPage> {
                             const Text(
                               'Note :',
                               style: TextStyle(
-                                fontSize: 19,
+                                fontSize: 17,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
@@ -179,7 +194,7 @@ class _MembershipInfoPageState extends State<MembershipInfoPage> {
                               child: Text(
                                 'Membership details are fixed. For updates, email us at info@winngoofame.co.uk.',
                                 style: TextStyle(
-                                  fontSize: 17,
+                                  fontSize: 14,
                                   color: Appcolors.white,
                                 ),
                               ),
@@ -187,6 +202,7 @@ class _MembershipInfoPageState extends State<MembershipInfoPage> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 40),
                     ],
                   ),
                 ),
@@ -202,21 +218,24 @@ class _MembershipInfoPageState extends State<MembershipInfoPage> {
           child: Icon(icon, size: 21),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
           child: Text(
             label,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
         const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: BorderSide.strokeAlignCenter,
+          ),
           child: Text(
             ':',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(value, style: TextStyle(fontSize: 18)),
         ),
       ],

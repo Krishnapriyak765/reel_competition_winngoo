@@ -3,10 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:reels_application/core/constants/app_colors.dart';
 import 'package:reels_application/core/services/competition_fetch.dart';
 import 'package:reels_application/data/models/competition_model.dart';
+import 'package:reels_application/main.dart';
 import 'package:reels_application/presentation/compatition/tabs/about_tab.dart';
 import 'package:reels_application/presentation/compatition/tabs/demo_video.dart';
 import 'package:reels_application/presentation/compatition/tabs/rules_guidelines.dart';
 import 'package:reels_application/widgets/carousel_slider.dart';
+import 'package:reels_application/widgets/tab_floating_buttons.dart';
 
 class CompetitionPage extends StatefulWidget {
   @override
@@ -15,11 +17,19 @@ class CompetitionPage extends StatefulWidget {
 
 class _CompetitionPageState extends State<CompetitionPage> {
   Competition? competition;
+  bool _showIntroImage = true;
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     loadCompetition();
+  }
+
+  void _hideIntroImage() {
+    setState(() {
+      _showIntroImage = false;
+    });
   }
 
   void loadCompetition() async {
@@ -55,6 +65,13 @@ class _CompetitionPageState extends State<CompetitionPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          actions: [
+            SizedBox(
+              height: screenHeight * 0.035,
+              width: screenwidth * 0.035,
+              child: Image.asset('assets/icons/winngoo_logo.png'),
+            ),
+          ],
           elevation: 0,
           flexibleSpace: Container(
             decoration: BoxDecoration(
@@ -70,86 +87,124 @@ class _CompetitionPageState extends State<CompetitionPage> {
             ),
           ),
         ),
-        body: Column(
-          children: [
-            Container(height: screenHeight * 0.23, child: CarouselSliders()),
-
-            /// 👉 This is the row you asked for
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10.0,
-                vertical: 1,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    competition != null
-                        ? "Time: ${competition!.remainingTime}"
-                        : "Time: ...",
-                    style: GoogleFonts.inter(
-                      color: Colors.red,
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
+        body:
+            _showIntroImage
+                ? Stack(
+                  children: [
+                    // Background image
+                    Container(
+                      width: screenwidth * 0.5,
+                      height: screenHeight * 0.22,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/images/competition_intro.png',
+                          ),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    competition != null
-                        ? "End Date: ${competition!.created_at}"
-                        : "End Date: ...",
-                    style: GoogleFonts.inter(
-                      color: Colors.red,
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
+
+                    // Close icon
+                    Positioned(
+                      top: 40,
+                      right: 20,
+                      child: GestureDetector(
+                        onTap: _hideIntroImage,
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.black54,
+                          child: Icon(Icons.close, color: Colors.white),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
+                  ],
+                )
+                : Column(
+                  children: [
+                    Container(
+                      height: screenHeight * 0.23,
+                      child: Image.asset(
+                        'assets/images/Mobile_banner_about.png',
+                      ),
+                    ),
 
-            const SizedBox(height: 8),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+                    /// 👉 This is the row you asked for
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                        vertical: 1,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            competition != null
+                                ? "Time: ${competition!.remainingTime}"
+                                : "Time: ...",
+                            style: GoogleFonts.inter(
+                              color: Colors.red,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            competition != null
+                                ? "End Date: ${competition!.created_at}"
+                                : "End Date: ...",
+                            style: GoogleFonts.inter(
+                              color: Colors.red,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-                borderRadius: BorderRadius.circular(32),
-              ),
-              child: TabBar(
-                labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-                indicator: BoxDecoration(
-                  color: Appcolors.primaryColor,
-                  borderRadius: BorderRadius.circular(34),
+                    const SizedBox(height: 8),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                      child: TabBar(
+                        labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+                        indicator: BoxDecoration(
+                          color: Appcolors.primaryColor,
+                          borderRadius: BorderRadius.circular(34),
+                        ),
+                        dividerHeight: 0,
+                        labelColor: Colors.white,
+                        unselectedLabelColor: Colors.grey,
+                        labelStyle: TextStyle(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
+                        tabs: const [
+                          Tab(text: "   About   "),
+                          Tab(text: "Demo videos"),
+                          Tab(text: "Rules & Guidelines"),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          AboutTab(),
+                          DemoVideosTab(),
+                          RulesAndGuidelinesTab(),
+                        ],
+                      ),
+                    ),
+                    TabFloatingButtons(),
+                  ],
                 ),
-                dividerHeight: 0,
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.grey,
-                labelStyle: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w600,
-                ),
-                tabs: const [
-                  Tab(text: "   About   "),
-                  Tab(text: "Demo videos"),
-                  Tab(text: "Rules & Guidelines"),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 10),
-
-            Expanded(
-              child: TabBarView(
-                children: [
-                  AboutTab(),
-                  DemoVideosTab(),
-                  RulesAndGuidelinesTab(),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

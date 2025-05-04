@@ -1,3 +1,7 @@
+import 'package:intl/intl.dart';
+
+import 'package:intl/intl.dart';
+
 class User {
   final int id;
   final String userId;
@@ -9,7 +13,8 @@ class User {
   final String residentialCountry;
   final String phoneNumber;
   final int age;
-  final int rewardPoints;
+  // final int rewardPoints;
+  final DateTime createdAt; // New field
 
   User({
     required this.id,
@@ -22,8 +27,14 @@ class User {
     required this.residentialCountry,
     required this.phoneNumber,
     required this.age,
-    required this.rewardPoints,
+    // required this.rewardPoints,
+    required this.createdAt,
   });
+
+  // Getter to return only the time from createdAt
+  String get createdTimeOnly {
+    return DateFormat('hh:mm a').format(createdAt);
+  }
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -37,7 +48,8 @@ class User {
       residentialCountry: json['residential_country'],
       phoneNumber: json['phone_number'],
       age: json['age'],
-      rewardPoints: json['reward_points'],
+      // rewardPoints: json['reward_points'],
+      createdAt: DateTime.parse(json['created_at']), // Parse from JSON
     );
   }
 }

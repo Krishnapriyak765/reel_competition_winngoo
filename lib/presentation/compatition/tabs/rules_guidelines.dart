@@ -39,7 +39,6 @@ class RulesAndGuidelinesTab extends StatelessWidget {
             ),
           ),
           SizedBox(height: 20),
-          TabFloatingButtons(),
         ],
       ),
     );
